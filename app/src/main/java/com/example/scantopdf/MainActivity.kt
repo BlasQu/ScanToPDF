@@ -2,22 +2,15 @@ package com.example.scantopdf
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import androidx.core.view.drawToBitmap
-import com.example.scantopdf.fragments.DocumentsFragment
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.example.scantopdf.Fragments.DocumentsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 
