@@ -12,6 +12,9 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.drawToBitmap
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -43,6 +46,9 @@ class MainActivity : AppCompatActivity() {
                     ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_PERMISSION)
                 }
             }
+        }
+        getText.setOnClickListener {
+            scanTextFromImage()
         }
     }
 
@@ -77,6 +83,14 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == CAMERA_RQ && resultCode == RESULT_OK){
             imageHolder.setImageBitmap(data?.extras?.get("data") as Bitmap) // Display photo to test image view
             // Later convert everything to fragment
+        }
+    }
+
+    private fun scanTextFromImage(){
+        val firebaseVisionImage = FirebaseVisionImage.fromBitmap(imageHolder.drawToBitmap())
+        val firebaseTextDetector = FirebaseVision.getInstance().onDeviceTextRecognizer
+        val result = firebaseTextDetector.processImage(firebaseVisionImage).addOnSuccessListener {
+            Toast.makeText(applicationContext, it.text, Toast.LENGTH_SHORT).show()
         }
     }
 }
