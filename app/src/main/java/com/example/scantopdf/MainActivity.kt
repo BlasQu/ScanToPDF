@@ -3,6 +3,7 @@ package com.example.scantopdf
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private val CAMERA_RQ = 101
     val CAMERA_PERMISSION = 1010
+    private val IMAGE_RQ = 102
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +53,16 @@ class MainActivity : AppCompatActivity() {
         getText.setOnClickListener {
             scanTextFromImage()
         }
+        btn_selectFromGallery.setOnClickListener {
+            pickImage()
+        }
+    }
+
+    private fun pickImage(){
+        val getImage = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
+        startActivityForResult(Intent.createChooser(getImage, "Select image!"), IMAGE_RQ) // User gets to select image from gallery
     }
 
     override fun onRequestPermissionsResult(
@@ -66,8 +79,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 !shouldShowRequestPermissionRationale(permissions[0]) -> {
                     // Means that user denied permission permanently, cannot proceed further - provide way for user to app settings
-                    val appSettings = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
-                    appSettings.flags = Intent.FLAG_ACTIVITY_NEW_TASK // Create new tab for app settings instead of overwriting working application
+                    val appSettings = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK // Create new tab for app settings instead of overwriting working application
+                    }
                     startActivity(appSettings) // Go to permission settings
                 }
             }
@@ -83,6 +97,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == CAMERA_RQ && resultCode == RESULT_OK){
             imageHolder.setImageBitmap(data?.extras?.get("data") as Bitmap) // Display photo to test image view
             // Later convert everything to fragment
+        }
+        if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
+            val data = contentResolver.openInputStream(data?.data!!)
+            imageHolder.setImageBitmap(BitmapFactory.decodeStream(data))
         }
     }
 
