@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.drawToBitmap
+import com.example.scantopdf.fragments.DocumentsFragment
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,6 +32,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnListeners()
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.fragmentContainer, DocumentsFragment())
+            commit()
+        }
     }
 
     private fun btnListeners(){
@@ -50,9 +56,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        getText.setOnClickListener {
-            scanTextFromImage()
-        }
         btn_selectFromGallery.setOnClickListener {
             pickImage()
         }
@@ -62,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         val getImage = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
         }
-        startActivityForResult(Intent.createChooser(getImage, "Select image!"), IMAGE_RQ) // User gets to select image from gallery
+        startActivityForResult(getImage, IMAGE_RQ) // User gets to select image from gallery
     }
 
     override fun onRequestPermissionsResult(
@@ -95,20 +98,20 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_RQ && resultCode == RESULT_OK){
-            imageHolder.setImageBitmap(data?.extras?.get("data") as Bitmap) // Display photo to test image view
+            //imageHolder.setImageBitmap(data?.extras?.get("data") as Bitmap) // Display photo to test image view
             // Later convert everything to fragment
         }
         if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
             val data = contentResolver.openInputStream(data?.data!!)
-            imageHolder.setImageBitmap(BitmapFactory.decodeStream(data))
+            //imageHolder.setImageBitmap(BitmapFactory.decodeStream(data))
         }
     }
 
     private fun scanTextFromImage(){
-        val firebaseVisionImage = FirebaseVisionImage.fromBitmap(imageHolder.drawToBitmap())
-        val firebaseTextDetector = FirebaseVision.getInstance().onDeviceTextRecognizer
-        val result = firebaseTextDetector.processImage(firebaseVisionImage).addOnSuccessListener {
-            Toast.makeText(applicationContext, it.text, Toast.LENGTH_SHORT).show()
-        }
+        //val firebaseVisionImage = FirebaseVisionImage.fromBitmap(imageHolder.drawToBitmap())
+        //val firebaseTextDetector = FirebaseVision.getInstance().onDeviceTextRecognizer
+        //firebaseTextDetector.processImage(firebaseVisionImage).addOnSuccessListener {
+            //Toast.makeText(applicationContext, it.text, Toast.LENGTH_SHORT).show()
+        //}
     }
 }
