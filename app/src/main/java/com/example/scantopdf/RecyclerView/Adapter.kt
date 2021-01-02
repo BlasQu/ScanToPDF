@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.R
+import kotlinx.android.synthetic.main.rv_item.view.*
 
 class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
@@ -31,7 +32,7 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return (oldList[oldItemPosition].title == newList[newItemPosition].title && oldList[oldItemPosition].image == newList[newItemPosition].image)
+            return (oldList[oldItemPosition].title == newList[newItemPosition].title)
         }
 
     }
@@ -41,6 +42,7 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.itemView.test.text = list[position].title
     }
 
     override fun getItemCount(): Int {

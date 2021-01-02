@@ -8,9 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.Fragments.DocumentsFragment
+import com.example.scantopdf.MVVM.Viewmodel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -26,10 +33,15 @@ class MainActivity : AppCompatActivity() {
 
         btnListeners()
 
+        val viewmodel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(Viewmodel::class.java)
+        viewmodel.liveDataDoc.observe(this, Observer {
+            if (it.isNotEmpty()) Toast.makeText(this, it[0].title, Toast.LENGTH_SHORT).show()
+        })
+
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainer, DocumentsFragment())
             commit()
-        }
+        } // Adding fragment to container
     }
 
     private fun btnListeners(){
