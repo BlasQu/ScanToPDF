@@ -2,6 +2,8 @@ package com.example.scantopdf
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -101,12 +103,13 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_RQ && resultCode == RESULT_OK){
-            //imageHolder.setImageBitmap(data?.extras?.get("data") as Bitmap) // Display photo to test image view
-            // Later convert everything to fragment
+            val dataCamera = data?.extras?.get("data") as Bitmap // Get image
+            Functions().dialogAdd(this)
         }
         if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
-            val data = contentResolver.openInputStream(data?.data!!)
-            //imageHolder.setImageBitmap(BitmapFactory.decodeStream(data))
+            val galleryEntry = contentResolver.openInputStream(data?.data!!) // Get image
+            val dataGallery =  BitmapFactory.decodeStream(galleryEntry) // Convert stream to bitmap
+            Functions().dialogAdd(this)
         }
     }
 

@@ -1,13 +1,12 @@
 package com.example.scantopdf.ROOM
 
 import android.content.Context
-import androidx.room.Dao
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import com.example.scantopdf.Data.Converters
 import com.example.scantopdf.Data.Doc
 
 @Database(version = 1, entities = [Doc::class])
+@TypeConverters(Converters::class)
 abstract class RoomDB : RoomDatabase() {
 
     abstract fun getDao() : RoomDao

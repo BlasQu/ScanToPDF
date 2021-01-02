@@ -42,7 +42,7 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.itemView.test.text = list[position].title
+        holder.itemView.text_title.text = list[position].title
     }
 
     override fun getItemCount(): Int {
