@@ -25,10 +25,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val CAMERA_RQ = 101
+    val CAMERA_RQ = 101
     val CAMERA_PERMISSION = 1010
-    private val IMAGE_RQ = 102
+    val IMAGE_RQ = 102
     lateinit var viewmodel : Viewmodel
+    lateinit var dataCamera : Bitmap
+    lateinit var dataGallery : Bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,13 +105,13 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_RQ && resultCode == RESULT_OK){
-            val dataCamera = data?.extras?.get("data") as Bitmap // Get image
-            Functions().dialogAdd(this)
+            dataCamera = data?.extras?.get("data") as Bitmap // Get image
+            Functions().dialogAdd(this, requestCode)
         }
         if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
             val galleryEntry = contentResolver.openInputStream(data?.data!!) // Get image
-            val dataGallery =  BitmapFactory.decodeStream(galleryEntry) // Convert stream to bitmap
-            Functions().dialogAdd(this)
+            dataGallery =  BitmapFactory.decodeStream(galleryEntry) // Convert stream to bitmap
+            Functions().dialogAdd(this, requestCode)
         }
     }
 

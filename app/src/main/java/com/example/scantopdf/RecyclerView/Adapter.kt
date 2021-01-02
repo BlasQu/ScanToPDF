@@ -1,5 +1,6 @@
 package com.example.scantopdf.RecyclerView
 
+import android.graphics.Bitmap
 import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
@@ -43,6 +44,7 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.text_title.text = list[position].title
+        holder.itemView.img_preview.setImageBitmap(Bitmap.createScaledBitmap(list[position].image, 100, 100, false)) // Scale image to 100dp (size of imgview)
     }
 
     override fun getItemCount(): Int {

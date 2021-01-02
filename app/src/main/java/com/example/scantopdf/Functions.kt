@@ -25,7 +25,7 @@ class Functions {
         dialog.show()
     }
 
-    fun dialogAdd(context: MainActivity){
+    fun dialogAdd(context: MainActivity, requestCode: Int){
         val builder = AlertDialog.Builder(context)
         builder.apply {
             setCancelable(false)
@@ -36,8 +36,12 @@ class Functions {
 
         dialog.btn_additem.setOnClickListener {
             if (dialog.edittext_addtitle.text.isNotEmpty()) {
-                context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString()))
+                when (requestCode) {
+                    context.CAMERA_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataCamera))
+                    context.IMAGE_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataGallery))
+                }
                 dialog.dismiss()
+
             }
             else dialog.edittext_addtitle.error = "Field must not be empty!"
         }
