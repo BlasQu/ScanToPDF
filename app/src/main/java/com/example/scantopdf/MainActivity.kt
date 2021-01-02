@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val CAMERA_RQ = 101
     val CAMERA_PERMISSION = 1010
     private val IMAGE_RQ = 102
+    lateinit var viewmodel : Viewmodel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         btnListeners()
 
-        val viewmodel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(Viewmodel::class.java)
-        viewmodel.liveDataDoc.observe(this, Observer {
-            if (it.isNotEmpty()) Toast.makeText(this, it[0].title, Toast.LENGTH_SHORT).show()
-        })
+        viewmodel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(Viewmodel::class.java)
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainer, DocumentsFragment())

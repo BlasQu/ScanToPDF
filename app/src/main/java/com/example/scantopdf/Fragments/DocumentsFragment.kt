@@ -3,6 +3,7 @@ package com.example.scantopdf.Fragments
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.MainActivity
@@ -15,6 +16,7 @@ class DocumentsFragment : Fragment(R.layout.fragment_documents) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Activity = activity as MainActivity
+
         setupRV()
     }
 
@@ -24,6 +26,10 @@ class DocumentsFragment : Fragment(R.layout.fragment_documents) {
             layoutManager = LinearLayoutManager(this.context)
             this.adapter = adapter
         }
+
+        Activity.viewmodel.liveDataDoc.observe(viewLifecycleOwner, Observer {
+            if (it.isNotEmpty()) adapter.submitData(it)
+        })
 
     }
 
