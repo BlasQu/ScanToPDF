@@ -1,6 +1,7 @@
 package com.example.scantopdf.MVVM
 
 import android.app.Application
+import android.graphics.Bitmap
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +16,10 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
 
     var liveDataDoc : LiveData<List<Doc>>
     val repo : Repository
-    lateinit var testText : String
+
+    lateinit var image : Bitmap
+    lateinit var title : String
+    lateinit var date : String
 
     init {
         val dao = RoomDB.createDB(app).getDao()
@@ -23,9 +27,15 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
         liveDataDoc = repo.getData()
     }
 
-    fun insertData(data: Doc){
+    fun insertData(data: Doc) {
         viewModelScope.launch(Dispatchers.IO){
             repo.insertData(data)
+        }
+    }
+
+    fun deleteData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteData(date)
         }
     }
 }

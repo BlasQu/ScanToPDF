@@ -10,9 +10,48 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent">
 
+       <ImageView
+           android:id="@+id/image_item"
+           android:layout_width="150dp"
+           android:layout_height="150dp"
+           android:layout_margin="15dp"/>
+
        <TextView
-           android:id="@+id/test"
-           android:textSize="30dp"
+           android:id="@+id/text_title"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="30sp"
+           android:textColor="@color/black"
+           android:layout_toRightOf="@id/image_item"
+           android:layout_margin="15dp"
+           android:padding="5dp"/>
+
+       <TextView
+           android:id="@+id/text_date"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:textSize="15sp"
+           android:textColor="@color/black"
+           android:layout_toRightOf="@id/image_item"
+           android:layout_below="@id/text_title"
+           android:layout_margin="15dp"
+           android:padding="5dp"/>
+
+       <androidx.appcompat.widget.AppCompatButton
+           android:id="@+id/btn_deleteitem"
+           android:layout_width="wrap_content"
+           android:layout_alignParentLeft="true"
+           android:layout_below="@id/image_item"
+           android:text="Delete"
+           android:layout_margin="15dp"
+           android:layout_height="wrap_content"/>
+
+       <androidx.appcompat.widget.AppCompatButton
+           android:id="@+id/btn_scantopdf"
+           android:layout_alignParentRight="true"
+           android:layout_below="@id/image_item"
+           android:layout_margin="15dp"
+           android:text="Scan To PDF"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"/>
 

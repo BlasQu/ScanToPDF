@@ -8,4 +8,6 @@ class Repository(val dao: RoomDao) {
     fun getData() : LiveData<List<Doc>> = dao.getData()
 
     suspend fun insertData(data: Doc) = dao.insertData(data)
+
+    suspend fun deleteData(date: String) = dao.deleteData(date)
 }

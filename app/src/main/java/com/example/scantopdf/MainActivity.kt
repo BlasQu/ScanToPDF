@@ -21,6 +21,7 @@ import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.Fragments.DocumentsFragment
 import com.example.scantopdf.MVVM.Viewmodel
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,8 +48,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val fragmentSearch = supportFragmentManager.findFragmentByTag("ITEM_FRAGMENT")
-        if (fragmentSearch != null && fragmentSearch.isVisible) {
+        val fragmentSearch = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+        if (fragmentSearch!!.tag.equals("ITEM_FRAGMENT")) {
             supportFragmentManager.beginTransaction().apply {
                 replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
                 // Add animation later
