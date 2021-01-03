@@ -50,7 +50,9 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return (oldList[oldItemPosition].title == newList[newItemPosition].title)
+            return (oldList[oldItemPosition].title == newList[newItemPosition].title
+                    && oldList[oldItemPosition].id == newList[newItemPosition].id
+                    && oldList[oldItemPosition].image == newList[newItemPosition].image)
         }
 
     }

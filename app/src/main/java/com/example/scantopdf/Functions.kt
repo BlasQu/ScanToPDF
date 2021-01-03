@@ -5,10 +5,14 @@ import android.content.Context
 import android.content.DialogInterface
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.os.ConfigurationCompat.getLocales
+import com.example.scantopdf.Data.CONSTS
 import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.Fragments.DocumentsFragment
 import kotlinx.android.synthetic.main.dialog_additem.*
 import kotlinx.android.synthetic.main.dialog_confirm.*
+import java.lang.String.format
+import java.text.SimpleDateFormat
 import java.util.*
 
 class Functions {
@@ -40,8 +44,8 @@ class Functions {
         dialog.btn_additem.setOnClickListener {
             if (dialog.edittext_addtitle.text.isNotEmpty()) {
                 when (requestCode) {
-                    context.CAMERA_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataCamera, Calendar.getInstance().time.toString()))
-                    context.IMAGE_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataGallery, Calendar.getInstance().time.toString()))
+                    context.CAMERA_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataCamera, SimpleDateFormat("EEEE, yyyy.MM.dd 'at' HH:mm:ss ", getLocales(context.resources.configuration).get(0)).format(Calendar.getInstance().time).toString()))
+                    context.IMAGE_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataGallery, SimpleDateFormat("EEEE, yyyy.MM.dd 'at' HH:mm:ss ", getLocales(context.resources.configuration).get(0)).format(Calendar.getInstance().time).toString()))
                 }
                 dialog.dismiss()
 
@@ -77,5 +81,17 @@ class Functions {
         dialog.dialogbtn_cancel.setOnClickListener {
             dialog.dismiss()
         }
+    }
+
+    fun singleChoiceDialog(context: MainActivity) {
+        val builder = AlertDialog.Builder(context)
+        builder.apply {
+            setSingleChoiceItems(CONSTS.SORTBYITEMS, context.getSharedPrefs()) {dialog, which ->
+                dialog.dismiss()
+                context.viewmodel.setSortNumber(which)
+            }
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 }

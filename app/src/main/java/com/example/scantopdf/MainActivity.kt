@@ -1,6 +1,8 @@
 package com.example.scantopdf
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -10,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -20,6 +25,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.Fragments.DocumentsFragment
 import com.example.scantopdf.MVVM.Viewmodel
+import kotlinx.android.synthetic.main.action_bar.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -38,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         btnListeners()
+        setToolbar()
 
         viewmodel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(Viewmodel::class.java)
 
@@ -47,6 +54,32 @@ class MainActivity : AppCompatActivity() {
         } // Adding fragment to container
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.sortby -> Functions().singleChoiceDialog(this)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    fun setToolbar() {
+        setSupportActionBar(toolbar)
+        supportActionBar!!.apply {
+            setDisplayShowTitleEnabled(false)
+            setHomeButtonEnabled(true)
+        }
+    }
+
+    fun getSharedPrefs(): Int {
+       val prefs = getSharedPreferences("ScanToPDF", Context.MODE_PRIVATE)
+       return prefs.getInt("sortBy", 0)
+    }
+
     override fun onBackPressed() {
         val fragmentSearch = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
         if (fragmentSearch!!.tag.equals("ITEM_FRAGMENT")) {
@@ -54,8 +87,10 @@ class MainActivity : AppCompatActivity() {
                 replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
                 // Add animation later
                 commit()
-            }
-        } // Detect if item fragment is visible, if so on back pressed button take user back to documents fragment
+            } // Detect if item fragment is visible, if so on back pressed button take user back to documents fragment
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private fun btnListeners(){
