@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scantopdf.Data.Doc
+import com.example.scantopdf.Fragments.DocumentsFragment
+import com.example.scantopdf.Fragments.ItemFragment
+import com.example.scantopdf.MainActivity
 import com.example.scantopdf.R
 import kotlinx.android.synthetic.main.rv_item.view.*
 
@@ -17,8 +20,16 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         init {
+            val context = itemView.context as MainActivity
             itemView.setOnClickListener {
-
+                synchronized(this) {
+                    context.viewmodel.testText = list[adapterPosition].title
+                }
+                context.supportFragmentManager.beginTransaction().apply {
+                    replace(R.id.fragmentContainer, ItemFragment(), "ITEM_FRAGMENT")
+                    // Add animation later
+                    commit()
+                }
             }
         }
     }

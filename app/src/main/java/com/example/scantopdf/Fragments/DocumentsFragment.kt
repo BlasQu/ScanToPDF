@@ -18,9 +18,9 @@ class DocumentsFragment : Fragment(R.layout.fragment_documents) {
     private lateinit var Activity : MainActivity
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Activity = activity as MainActivity
+        Activity = activity as MainActivity // Set reference to MainActivity
 
-        setupRV()
+        setupRV() // Setup Recycler View
     }
 
     fun setupRV(){
@@ -32,7 +32,7 @@ class DocumentsFragment : Fragment(R.layout.fragment_documents) {
 
         Activity.viewmodel.liveDataDoc.observe(viewLifecycleOwner, Observer {
             if (it.isNotEmpty()) adapter.submitData(it)
-        })
+        }) // Adapter and data observer to viewmodel
 
     }
 

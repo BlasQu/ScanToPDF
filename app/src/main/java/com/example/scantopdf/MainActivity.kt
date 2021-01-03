@@ -41,9 +41,20 @@ class MainActivity : AppCompatActivity() {
         viewmodel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(Viewmodel::class.java)
 
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragmentContainer, DocumentsFragment())
+            replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
             commit()
         } // Adding fragment to container
+    }
+
+    override fun onBackPressed() {
+        val fragmentSearch = supportFragmentManager.findFragmentByTag("ITEM_FRAGMENT")
+        if (fragmentSearch != null && fragmentSearch.isVisible) {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
+                // Add animation later
+                commit()
+            }
+        } // Detect if item fragment is visible, if so on back pressed button take user back to documents fragment
     }
 
     private fun btnListeners(){

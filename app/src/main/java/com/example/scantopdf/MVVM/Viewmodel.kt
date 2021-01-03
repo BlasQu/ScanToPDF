@@ -15,6 +15,7 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
 
     var liveDataDoc : LiveData<List<Doc>>
     val repo : Repository
+    lateinit var testText : String
 
     init {
         val dao = RoomDB.createDB(app).getDao()
