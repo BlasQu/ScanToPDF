@@ -16,7 +16,11 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
     private val list = mutableListOf<Doc>()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        init {
+            itemView.setOnClickListener {
 
+            }
+        }
     }
 
     inner class DiffCallBack(val oldList: List<Doc>, val newList: List<Doc>) : DiffUtil.Callback(){
