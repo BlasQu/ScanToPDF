@@ -16,6 +16,8 @@ class Repository(val dao: RoomDao) {
         }
     }
 
+    fun searchData(search: String) : LiveData<List<Doc>> = dao.searchData(search)
+
     suspend fun insertData(data: Doc) = dao.insertData(data)
 
     suspend fun deleteData(date: String) = dao.deleteData(date)

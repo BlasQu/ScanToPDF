@@ -14,6 +14,7 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
 
     var liveDataDoc : LiveData<List<Doc>>
     val numberSort = MutableLiveData<Int>((app.getSharedPreferences("ScanToPDF", Context.MODE_PRIVATE).getInt("sortBy", 0)))
+    val searchString = MutableLiveData<String>("")
     val repo : Repository
 
     lateinit var image : Bitmap
@@ -23,8 +24,8 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
     init {
         val dao = RoomDB.createDB(app).getDao()
         repo = Repository(dao)
-        liveDataDoc = Transformations.switchMap(numberSort) {
-            repo.getData(it)
+        liveDataDoc = Transformations.switchMap(searchString) {
+            repo.searchData(it)
         }
     }
 
