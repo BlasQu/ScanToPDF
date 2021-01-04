@@ -1,6 +1,7 @@
 package com.example.scantopdf.MVVM
 
 import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
 import androidx.lifecycle.*
 import androidx.room.RoomDatabase
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 class Viewmodel(app: Application) : AndroidViewModel(app) {
 
     var liveDataDoc : LiveData<List<Doc>>
-    var numberSort = MutableLiveData<Int>(0)
+    val numberSort = MutableLiveData<Int>((app.getSharedPreferences("ScanToPDF", Context.MODE_PRIVATE).getInt("sortBy", 0)))
     val repo : Repository
 
     lateinit var image : Bitmap

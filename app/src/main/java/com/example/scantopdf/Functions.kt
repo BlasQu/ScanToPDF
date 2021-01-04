@@ -89,9 +89,16 @@ class Functions {
             setSingleChoiceItems(CONSTS.SORTBYITEMS, context.getSharedPrefs()) {dialog, which ->
                 dialog.dismiss()
                 context.viewmodel.setSortNumber(which)
+                saveSharedPrefs(context, which) // Save chosen item to shared prefs
             }
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+    fun saveSharedPrefs(context: MainActivity, sortNumber: Int) {
+        val prefs = context.getSharedPreferences("ScanToPDF", Context.MODE_PRIVATE).edit()
+        prefs.putInt("sortBy", sortNumber)
+        prefs.apply()
     }
 }

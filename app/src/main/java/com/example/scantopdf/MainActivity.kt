@@ -45,13 +45,17 @@ class MainActivity : AppCompatActivity() {
 
         btnListeners()
         setToolbar()
+        setupViewModel()
 
-        viewmodel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(Viewmodel::class.java)
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
             commit()
         } // Adding fragment to container
+    }
+
+    fun setupViewModel() {
+        viewmodel = ViewModelProvider.AndroidViewModelFactory.getInstance(application).create(Viewmodel::class.java)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
