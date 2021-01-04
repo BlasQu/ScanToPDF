@@ -3,6 +3,8 @@ package com.example.scantopdf.MVVM
 import android.app.Application
 import android.content.Context
 import android.graphics.Bitmap
+import android.provider.MediaStore
+import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.room.RoomDatabase
 import com.example.scantopdf.Data.Doc
@@ -12,10 +14,18 @@ import kotlinx.coroutines.launch
 
 class Viewmodel(app: Application) : AndroidViewModel(app) {
 
-    var liveDataDoc : LiveData<List<Doc>>
     val numberSort = MutableLiveData<Int>((app.getSharedPreferences("ScanToPDF", Context.MODE_PRIVATE).getInt("sortBy", 0)))
     val searchString = MutableLiveData<String>("")
-    val repo : Repository
+    private val repo : Repository
+    var liveDataDoc : LiveData<List<Doc>>
+    private var mediatorData = MediatorLiveData<Pair<MutableLiveData<String>, MutableLiveData<Int>>>().apply {
+        addSource(searchString) {
+            postValue(Pair(searchString, numberSort))
+        }
+        addSource(numberSort) {
+            postValue(Pair(searchString, numberSort))
+        }
+    }
 
     lateinit var image : Bitmap
     lateinit var title : String
@@ -24,13 +34,9 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
     init {
         val dao = RoomDB.createDB(app).getDao()
         repo = Repository(dao)
-        liveDataDoc = Transformations.switchMap(searchString) {
-            repo.searchData(it)
+        liveDataDoc = Transformations.switchMap(mediatorData) {
+            repo.readMediatorData(it.first.value!!, it.second.value!!)
         }
-    }
-
-    fun setSortNumber(number: Int) {
-        numberSort.value = number
     }
 
     fun insertData(data: Doc) {

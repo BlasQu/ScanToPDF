@@ -88,7 +88,7 @@ class Functions {
         builder.apply {
             setSingleChoiceItems(CONSTS.SORTBYITEMS, context.getSharedPrefs()) {dialog, which ->
                 dialog.dismiss()
-                context.viewmodel.setSortNumber(which)
+                context.viewmodel.numberSort.postValue(which)
                 saveSharedPrefs(context, which) // Save chosen item to shared prefs
             }
         }
