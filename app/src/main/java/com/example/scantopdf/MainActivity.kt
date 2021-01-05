@@ -21,6 +21,8 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -30,6 +32,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -58,13 +61,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        relativeLayoutMainActivity.startAnimation(AnimationUtils.loadAnimation(this, R.anim.open_activity).apply {
+            interpolator = FastOutSlowInInterpolator()
+            startOffset = 1000
+        })
+
         btnListeners()
         setToolbar()
         setupViewModel()
-
-        val intent23 = Intent(this, ScanActivity::class.java)
-        startActivityForResult(intent23, CAMERA_RQ)
-
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
@@ -109,6 +113,12 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+        return super.onSupportNavigateUp()
+    }
+
     fun setToolbar() {
         setSupportActionBar(toolbar)
         supportActionBar!!.apply {
@@ -123,11 +133,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
         val fragmentSearch = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
         if (fragmentSearch!!.tag.equals("ITEM_FRAGMENT")) {
             supportFragmentManager.beginTransaction().apply {
+                setCustomAnimations(R.anim.slide_from_left_enter, R.anim.slide_from_left_exit)
                 replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
-                // Add animation later
                 commit()
             } // Detect if item fragment is visible, if so on back pressed button take user back to documents fragment
         } else {

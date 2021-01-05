@@ -5,6 +5,10 @@ import android.text.Layout
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scantopdf.Data.Doc
@@ -28,10 +32,11 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
                     context.viewmodel.date = list[adapterPosition].date
                 }
                 context.supportFragmentManager.beginTransaction().apply {
+                    setCustomAnimations(R.anim.slide_from_right_enter, R.anim.slide_from_right_exit)
                     replace(R.id.fragmentContainer, ItemFragment(), "ITEM_FRAGMENT")
-                    // Add animation later
                     commit()
                 }
+                context.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             }
         }
     }
@@ -50,9 +55,7 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return (oldList[oldItemPosition].title == newList[newItemPosition].title
-                    && oldList[oldItemPosition].id == newList[newItemPosition].id
-                    && oldList[oldItemPosition].image == newList[newItemPosition].image)
+            return (oldList[oldItemPosition].date == newList[newItemPosition].date)
         }
 
     }
