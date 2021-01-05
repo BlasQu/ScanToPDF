@@ -9,6 +9,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,8 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -77,6 +80,9 @@ class MainActivity : AppCompatActivity() {
 
         val search = menu?.findItem(R.id.search)?.actionView as SearchView
         search.apply {
+            findViewById<TextView>(R.id.search_src_text).setTextColor(resources.getColor(R.color.white))
+            findViewById<ImageView>(R.id.search_button).setImageResource(R.drawable.ic_baseline_search_24)
+            findViewById<ImageView>(R.id.search_close_btn).setImageResource(R.drawable.ic_baseline_close_24)
             queryHint = "'Receipt', 'Taxes' or 'Document'"
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
@@ -133,10 +139,10 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     // Permission is granted, Proceed with button action
-                    val pref = ScanConstants.OPEN_CAMERA
-                    val intent23 = Intent(this, ScanActivity::class.java)
-                    intent23.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, pref)
-                    startActivityForResult(intent23, CAMERA_RQ)
+                    // val pref = ScanConstants.OPEN_CAMERA
+                    // val intent = Intent(this, ScanActivity::class.java)
+                    // intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, pref) Everything to rewrite with registerForActivityResult()
+                    startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_RQ)
                 }
                 else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
                     // Denied Once
