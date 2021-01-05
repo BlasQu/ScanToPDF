@@ -21,6 +21,7 @@ import android.provider.MediaStore
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -141,6 +142,16 @@ class MainActivity : AppCompatActivity() {
                 replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
                 commit()
             } // Detect if item fragment is visible, if so on back pressed button take user back to documents fragment
+            btn_camera.apply {
+                visibility = View.VISIBLE
+                isClickable = true
+                startAnimation(AnimationUtils.loadAnimation(context, R.anim.scale_up))
+            }
+            btn_selectFromGallery.apply {
+                visibility = View.VISIBLE
+                isClickable = true
+                startAnimation(AnimationUtils.loadAnimation(context, R.anim.scale_up))
+            }
         } else {
             super.onBackPressed()
         }

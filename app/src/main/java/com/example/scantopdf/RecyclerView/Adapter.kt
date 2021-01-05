@@ -1,5 +1,6 @@
 package com.example.scantopdf.RecyclerView
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.text.Layout
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.example.scantopdf.Fragments.DocumentsFragment
 import com.example.scantopdf.Fragments.ItemFragment
 import com.example.scantopdf.MainActivity
 import com.example.scantopdf.R
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.rv_item.view.*
 
 class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
@@ -31,12 +33,27 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
                     context.viewmodel.title = list[adapterPosition].title
                     context.viewmodel.date = list[adapterPosition].date
                 }
-                context.supportFragmentManager.beginTransaction().apply {
-                    setCustomAnimations(R.anim.slide_from_right_enter, R.anim.slide_from_right_exit)
-                    replace(R.id.fragmentContainer, ItemFragment(), "ITEM_FRAGMENT")
-                    commit()
+                context.apply {
+                    supportFragmentManager.beginTransaction().apply {
+                        setCustomAnimations(
+                            R.anim.slide_from_right_enter,
+                            R.anim.slide_from_right_exit
+                        )
+                        replace(R.id.fragmentContainer, ItemFragment(), "ITEM_FRAGMENT")
+                        commit()
+                    }
+                    supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+                    btn_camera.apply {
+                        isClickable = false
+                        startAnimation(AnimationUtils.loadAnimation(context, R.anim.scale_down))
+                        visibility = View.GONE
+                    }
+                    btn_selectFromGallery.apply {
+                        isClickable = false
+                        startAnimation(AnimationUtils.loadAnimation(context, R.anim.scale_down))
+                        visibility = View.GONE
+                    }
                 }
-                context.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             }
         }
     }

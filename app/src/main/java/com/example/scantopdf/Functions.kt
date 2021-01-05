@@ -70,11 +70,11 @@ class Functions {
 
         dialog.dialogbtn_confirm.setOnClickListener {
             context.viewmodel.deleteData()
-            context.supportFragmentManager.beginTransaction().apply {
-                replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
-                // Add animation later
-                commit()
-            }
+            context.onBackPressed()
+            //context.supportFragmentManager.beginTransaction().apply {
+            //    replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
+            //    commit()
+            //}
             dialog.dismiss()
         }
 
