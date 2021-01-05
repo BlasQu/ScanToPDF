@@ -3,6 +3,8 @@ package com.example.scantopdf
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.os.ConfigurationCompat.getLocales
@@ -41,6 +43,8 @@ class Functions {
         val dialog = builder.create()
         dialog.show()
 
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent)))
+
         dialog.btn_additem.setOnClickListener {
             if (dialog.edittext_addtitle.text.isNotEmpty()) {
                 when (requestCode) {
@@ -67,6 +71,8 @@ class Functions {
         }
         val dialog = builder.create()
         dialog.show()
+
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(context.resources.getColor(android.R.color.transparent)))
 
         dialog.dialogbtn_confirm.setOnClickListener {
             context.viewmodel.deleteData()

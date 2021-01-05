@@ -1,5 +1,6 @@
 package com.example.scantopdf.RecyclerView
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.text.Layout
@@ -17,6 +18,7 @@ import com.example.scantopdf.Fragments.DocumentsFragment
 import com.example.scantopdf.Fragments.ItemFragment
 import com.example.scantopdf.MainActivity
 import com.example.scantopdf.R
+import kotlinx.android.synthetic.main.action_bar.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.rv_item.view.*
 

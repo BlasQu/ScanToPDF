@@ -1,5 +1,6 @@
 package com.example.scantopdf
 
+import android.animation.ObjectAnimator
 import android.app.ActionBar
 import android.app.Activity
 import android.app.Notification
@@ -11,6 +12,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.PorterDuff
+import android.graphics.drawable.AnimationDrawable
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -106,18 +109,16 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.sortby -> Functions().singleChoiceDialog(this)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-        return super.onSupportNavigateUp()
     }
 
     fun setToolbar() {
@@ -222,10 +223,12 @@ class MainActivity : AppCompatActivity() {
             dataCamera = data?.extras?.get("data") as Bitmap // Get image
             Functions().dialogAdd(this, requestCode)
         }
-        if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
+        else if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
             val uri = data!!.extras!!.getParcelable<Uri>(ScanConstants.SCANNED_RESULT)!!
             dataGallery = MediaStore.Images.Media.getBitmap(contentResolver, uri);
             Functions().dialogAdd(this, requestCode)
+        } else {
+            Toast.makeText(applicationContext, "There was an error! Try again!", Toast.LENGTH_SHORT).show()
         }
     }
 
