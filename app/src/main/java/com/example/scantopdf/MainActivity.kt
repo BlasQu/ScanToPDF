@@ -5,6 +5,7 @@ import android.app.ActionBar
 import android.app.Activity
 import android.app.Notification
 import android.app.SearchManager
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -44,8 +45,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.Fragments.DocumentsFragment
 import com.example.scantopdf.MVVM.Viewmodel
-import com.scanlibrary.ScanActivity
-import com.scanlibrary.ScanConstants
+import com.labters.documentscanner.ImageCropActivity
+import com.labters.documentscanner.helpers.ScannerConstants
 import kotlinx.android.synthetic.main.action_bar.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -58,8 +59,7 @@ class MainActivity : AppCompatActivity() {
     val IMAGE_RQ = 102
     lateinit var viewmodel : Viewmodel
     lateinit var data : Bitmap
-    lateinit var dataCamera : Bitmap
-    lateinit var dataGallery : Bitmap
+    lateinit var dataImage : Bitmap
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         btnListeners()
         setToolbar()
         setupViewModel()
+        Functions().translateScanner()
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
@@ -163,10 +164,7 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     // Permission is granted, Proceed with button action
-                    // val pref = ScanConstants.OPEN_CAMERA
-                    // val intent = Intent(this, ScanActivity::class.java)
-                    // intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, pref) Everything to rewrite with registerForActivityResult()
-                    startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_RQ)
+                    startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE),CAMERA_RQ)
                 }
                 else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
                     // Denied Once
@@ -184,10 +182,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun pickImage(){
-        val pref = ScanConstants.OPEN_MEDIA
-        val intent = Intent(this, ScanActivity::class.java)
-        intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, pref)
-        startActivityForResult(intent, IMAGE_RQ) // User gets to select image from gallery
+        val getImage = Intent(Intent.ACTION_GET_CONTENT).apply {
+            type = "image/*"
+        }
+        startActivityForResult(getImage, IMAGE_RQ) // User gets to select image from gallery
     }
 
     override fun onRequestPermissionsResult(
@@ -220,23 +218,19 @@ class MainActivity : AppCompatActivity() {
     ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CAMERA_RQ && resultCode == RESULT_OK){
-            dataCamera = data?.extras?.get("data") as Bitmap // Get image
-            Functions().dialogAdd(this, requestCode)
+            dataImage = data?.extras?.get("data") as Bitmap// Get image
+            ScannerConstants.selectedImageBitmap = dataImage
+            startActivityForResult(Intent(this, ImageCropActivity::class.java), 110)
         }
         else if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
-            val uri = data!!.extras!!.getParcelable<Uri>(ScanConstants.SCANNED_RESULT)!!
-            dataGallery = MediaStore.Images.Media.getBitmap(contentResolver, uri);
-            Functions().dialogAdd(this, requestCode)
-        } else {
+            dataImage = BitmapFactory.decodeStream(contentResolver.openInputStream(data?.data!!))
+            ScannerConstants.selectedImageBitmap = dataImage
+            startActivityForResult(Intent(this, ImageCropActivity::class.java), 110)
+        } else if (requestCode == 110 && resultCode == RESULT_OK) {
+            Functions().dialogAdd(this)
+        }
+        else {
             Toast.makeText(applicationContext, "There was an error! Try again!", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun scanTextFromImage(){
-        //val firebaseVisionImage = FirebaseVisionImage.fromBitmap(imageHolder.drawToBitmap())
-        //val firebaseTextDetector = FirebaseVision.getInstance().onDeviceTextRecognizer
-        //firebaseTextDetector.processImage(firebaseVisionImage).addOnSuccessListener {
-            //Toast.makeText(applicationContext, it.text, Toast.LENGTH_SHORT).show()
-        //}
     }
 }

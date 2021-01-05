@@ -11,6 +11,7 @@ import androidx.core.os.ConfigurationCompat.getLocales
 import com.example.scantopdf.Data.CONSTS
 import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.Fragments.DocumentsFragment
+import com.labters.documentscanner.helpers.ScannerConstants
 import kotlinx.android.synthetic.main.dialog_additem.*
 import kotlinx.android.synthetic.main.dialog_confirm.*
 import java.lang.String.format
@@ -18,6 +19,14 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Functions {
+
+    fun translateScanner() {
+        // Translating text from imported library, boiler-plate code
+        ScannerConstants.backText = "Cancel"
+        ScannerConstants.cropText = "Confirm"
+        ScannerConstants.cropError = "Crop can't be accepted by that state."
+        ScannerConstants.imageError = "No image was found."
+    }
 
     fun showDialog(context: MainActivity, title: String, description: String){
         val builder = AlertDialog.Builder(context)
@@ -34,7 +43,7 @@ class Functions {
         dialog.show()
     }
 
-    fun dialogAdd(context: MainActivity, requestCode: Int){
+    fun dialogAdd(context: MainActivity){
         val builder = AlertDialog.Builder(context)
         builder.apply {
             setCancelable(false)
@@ -47,10 +56,7 @@ class Functions {
 
         dialog.btn_additem.setOnClickListener {
             if (dialog.edittext_addtitle.text.isNotEmpty()) {
-                when (requestCode) {
-                    context.CAMERA_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataCamera, SimpleDateFormat("EEEE, yyyy.MM.dd 'at' HH:mm:ss ", getLocales(context.resources.configuration).get(0)).format(Calendar.getInstance().time).toString()))
-                    context.IMAGE_RQ -> context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataGallery, SimpleDateFormat("EEEE, yyyy.MM.dd 'at' HH:mm:ss ", getLocales(context.resources.configuration).get(0)).format(Calendar.getInstance().time).toString()))
-                }
+                context.viewmodel.insertData(Doc(0, dialog.edittext_addtitle.text.toString(), context.dataImage, SimpleDateFormat("EEEE, yyyy.MM.dd 'at' HH:mm:ss ", getLocales(context.resources.configuration).get(0)).format(Calendar.getInstance().time).toString()))
                 dialog.dismiss()
 
             }

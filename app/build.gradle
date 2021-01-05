@@ -37,7 +37,9 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 dependencies {
-    implementation project(':scanlibrary')
+
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'com.github.mayuce:AndroidDocumentScanner:1.5.3'
     implementation 'androidx.fragment:fragment-ktx:1.3.0-rc01'
     implementation 'androidx.activity:activity-ktx:1.2.0-rc01'
     implementation 'com.squareup.retrofit2:retrofit:2.7.1'
@@ -50,6 +52,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
+    implementation project(path: ':openCVLibrary')
 
     def room_version = "2.2.5"
     def lifecycle_version = "2.2.0"
