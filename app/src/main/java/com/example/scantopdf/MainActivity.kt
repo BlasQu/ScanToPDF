@@ -1,5 +1,7 @@
 package com.example.scantopdf
 
+import android.app.Activity
+import android.app.Notification
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
@@ -11,11 +13,15 @@ import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
+import android.provider.LiveFolders.INTENT
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
@@ -27,6 +33,8 @@ import androidx.lifecycle.lifecycleScope
 import com.example.scantopdf.Data.Doc
 import com.example.scantopdf.Fragments.DocumentsFragment
 import com.example.scantopdf.MVVM.Viewmodel
+import com.scanlibrary.ScanActivity
+import com.scanlibrary.ScanConstants
 import kotlinx.android.synthetic.main.action_bar.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -38,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     val CAMERA_PERMISSION = 1010
     val IMAGE_RQ = 102
     lateinit var viewmodel : Viewmodel
+    lateinit var data : Bitmap
     lateinit var dataCamera : Bitmap
     lateinit var dataGallery : Bitmap
 
@@ -48,6 +57,9 @@ class MainActivity : AppCompatActivity() {
         btnListeners()
         setToolbar()
         setupViewModel()
+
+        val intent23 = Intent(this, ScanActivity::class.java)
+        startActivityForResult(intent23, CAMERA_RQ)
 
 
         supportFragmentManager.beginTransaction().apply {
@@ -65,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
         val search = menu?.findItem(R.id.search)?.actionView as SearchView
         search.apply {
-            queryHint = "'Receipt' or '24.08'"
+            queryHint = "'Receipt', 'Taxes' or 'Document'"
             setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return true
@@ -121,7 +133,10 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(applicationContext, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                     // Permission is granted, Proceed with button action
-                    startActivityForResult(Intent(MediaStore.ACTION_IMAGE_CAPTURE), CAMERA_RQ) // Go to onActivityResult()
+                    val pref = ScanConstants.OPEN_CAMERA
+                    val intent23 = Intent(this, ScanActivity::class.java)
+                    intent23.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, pref)
+                    startActivityForResult(intent23, CAMERA_RQ)
                 }
                 else if (shouldShowRequestPermissionRationale(android.Manifest.permission.CAMERA)) {
                     // Denied Once
@@ -139,10 +154,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun pickImage(){
-        val getImage = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "image/*"
-        }
-        startActivityForResult(getImage, IMAGE_RQ) // User gets to select image from gallery
+        val pref = ScanConstants.OPEN_MEDIA
+        val intent = Intent(this, ScanActivity::class.java)
+        intent.putExtra(ScanConstants.OPEN_INTENT_PREFERENCE, pref)
+        startActivityForResult(intent, IMAGE_RQ) // User gets to select image from gallery
     }
 
     override fun onRequestPermissionsResult(
@@ -179,8 +194,8 @@ class MainActivity : AppCompatActivity() {
             Functions().dialogAdd(this, requestCode)
         }
         if (requestCode == IMAGE_RQ && resultCode == RESULT_OK){
-            val galleryEntry = contentResolver.openInputStream(data?.data!!) // Get image
-            dataGallery =  BitmapFactory.decodeStream(galleryEntry) // Convert stream to bitmap
+            val uri = data!!.extras!!.getParcelable<Uri>(ScanConstants.SCANNED_RESULT)!!
+            dataGallery = MediaStore.Images.Media.getBitmap(contentResolver, uri);
             Functions().dialogAdd(this, requestCode)
         }
     }
