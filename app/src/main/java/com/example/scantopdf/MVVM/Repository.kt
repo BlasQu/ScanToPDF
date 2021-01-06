@@ -11,6 +11,8 @@ class Repository(val dao: RoomDao) {
 
     suspend fun deleteData(date: String) = dao.deleteData(date)
 
+    suspend fun getFullResImage(id: Int) : List<Doc> = dao.getFullResImage(id)
+
     fun readMediatorData(search: String, number: Int) : LiveData<List<Doc>> {
         return when (number) {
             0 -> dao.searchMediatorData(search)

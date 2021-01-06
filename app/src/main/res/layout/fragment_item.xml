@@ -6,6 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.ItemFragment">
 
+    <include layout="@layout/progress_bar"/>
+
    <RelativeLayout
        android:id="@+id/relativeLayout"
        android:layout_width="match_parent"
@@ -16,6 +18,7 @@
            android:layout_width="150dp"
            android:layout_height="150dp"
            android:scaleType="centerCrop"
+           android:background="@drawable/imageview_border2"
            android:layout_margin="15dp"/>
 
        <TextView
@@ -59,7 +62,12 @@
            android:layout_alignParentRight="true"
            android:layout_below="@id/image_item"
            android:layout_margin="15dp"
+           android:textAllCaps="false"
            android:text="Scan To PDF"
+           android:textSize="20dp"
+           android:padding="5dp"
+           android:textColor="@color/white"
+           android:background="@drawable/btn_cancel"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"/>
 

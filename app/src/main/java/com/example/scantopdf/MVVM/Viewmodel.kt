@@ -27,6 +27,7 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    lateinit var fullResImage : Bitmap
     lateinit var image : Bitmap
     lateinit var title : String
     lateinit var date : String
@@ -36,6 +37,12 @@ class Viewmodel(app: Application) : AndroidViewModel(app) {
         repo = Repository(dao)
         liveDataDoc = Transformations.switchMap(mediatorData) {
             repo.readMediatorData(it.first.value!!, it.second.value!!)
+        }
+    }
+
+    fun getFullResImage(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            fullResImage = repo.getFullResImage(id)[0].image
         }
     }
 

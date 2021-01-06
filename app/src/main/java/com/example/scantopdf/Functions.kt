@@ -20,14 +20,6 @@ import java.util.*
 
 class Functions {
 
-    fun translateScanner() {
-        // Translating text from imported library, boiler-plate code
-        ScannerConstants.backText = "Cancel"
-        ScannerConstants.cropText = "Confirm"
-        ScannerConstants.cropError = "Crop can't be accepted by that state."
-        ScannerConstants.imageError = "No image was found."
-    }
-
     fun showDialog(context: MainActivity, title: String, description: String){
         val builder = AlertDialog.Builder(context)
         builder.apply {

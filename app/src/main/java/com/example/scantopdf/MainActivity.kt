@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         btnListeners()
         setToolbar()
         setupViewModel()
-        Functions().translateScanner()
+        translateScanner()
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragmentContainer, DocumentsFragment(), "DOCUMENTS_FRAGMENT")
@@ -128,6 +128,14 @@ class MainActivity : AppCompatActivity() {
             setDisplayShowTitleEnabled(false)
             setHomeButtonEnabled(true)
         }
+    }
+
+    fun translateScanner() {
+        // Translating text from imported library, boiler-plate code
+        ScannerConstants.backText = "Cancel"
+        ScannerConstants.cropText = "Confirm"
+        ScannerConstants.cropError = "Crop can't be accepted by that state."
+        ScannerConstants.imageError = "No image was found."
     }
 
     fun getSharedPrefs(): Int {

@@ -34,6 +34,7 @@ class Adapter : RecyclerView.Adapter<Adapter.ViewHolder>() {
                     context.viewmodel.image = list[adapterPosition].image
                     context.viewmodel.title = list[adapterPosition].title
                     context.viewmodel.date = list[adapterPosition].date
+                    context.viewmodel.getFullResImage(list[adapterPosition].id)
                 }
                 context.apply {
                     supportFragmentManager.beginTransaction().apply {
