@@ -7,3 +7,5 @@ This project is by far my most satisfying implementation, starting with that I w
 App basically is designed to take photo/import from gallery of a document and post nor save it to the PDF file so it can easily be sent with other sources.
 
 To play around with this app/project you have to download library for OpenCV and Camera croping made by mayuce: https://github.com/mayuce/AndroidDocumentScanner
+
+<img src="https://github.com/BlasQu/ScanToPDF/blob/master/ScanToPDF.gif"/>
